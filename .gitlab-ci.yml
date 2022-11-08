@@ -24,4 +24,4 @@ build:
     - python3 manage.py test
 
   after_script:
-    - git tag -a $CI_PIPELINE_IID $CI_COMMIT_SHA
+    - git tag -a '$CI_PIPELINE_IID' $CI_COMMIT_SHA -m '$CI_PIPELINE_IID'
