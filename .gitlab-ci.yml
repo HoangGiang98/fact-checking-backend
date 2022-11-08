@@ -1,27 +1,24 @@
 default:
   image: ubuntu:20.04
-  
   cache:
     paths:
-      - ~/.cache/pip/
-  
+    - "~/.cache/pip/"
   before_script:
-    - apt -y update
-    - apt -y install apt-utils
-    - apt -y install net-tools python3.8 python3-pip git
-    - apt -y upgrade
-    - git config user.email "gitlab@lrz.de"
-    - git config user.name "Gitlab Runner"
-    - pip install django
-    - cd fact-checking-tool
-
-
+  - apt -y update
+  - apt -y install apt-utils
+  - apt -y install net-tools python3.8 python3-pip git
+  - apt -y upgrade
+  - git config user.email "gitlab@lrz.de"
+  - git config user.name "Gitlab Runner"
+  - pip install django
+  - cd fact-checking-tool
 build:
   stage: build
   script:
-    - python3 manage.py migrate
-    - python3 manage.py check
-    - python3 manage.py test
+  - python3 manage.py migrate
+  - python3 manage.py check
+  - python3 manage.py test
 
-  after_script:
-    - git tag -a '$CI_PIPELINE_IID' $CI_COMMIT_SHA -m '$CI_PIPELINE_IID'
+stages:
+- test
+- build
