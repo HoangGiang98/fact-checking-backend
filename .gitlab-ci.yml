@@ -1,9 +1,26 @@
-build-job:
+default:
+  image: ubuntu:20.04
+  
+  cache:
+    paths:
+      - ~/.cache/pip/
+  
+  before_script:
+    - apt -y update
+    - apt -y install apt-utils
+    - apt -y install net-tools python3.8 python3-pip
+    - apt -y upgrade
+    - cd fact-checking-tool
+
+
+build:
   stage: build
   script:
-    - echo "Replace with a valid script"
+    - python3 manage.py migrate
+    - python3 manage.py check
 
-test-job:
+
+django-tests:
   stage: test
   script:
-    - echo "This job tests something"
+    - python3 manage.py test
