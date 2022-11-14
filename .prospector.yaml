@@ -1,0 +1,78 @@
+output-format: text
+
+strictness: medium
+test-warnings: true
+doc-warnings: false
+member-warnings: false
+summary-only: true
+messages-only: false
+
+inherits:
+  - default
+ignore-paths:
+  - docs
+ignore-patterns:
+  - (^|/)skip(this)?(/|$)
+autodetect: true
+max-line-length: 88
+
+pep8:
+  full: true
+
+bandit:
+  run: true
+
+dodgy:
+  run: true
+
+mccabe:
+  run: false
+  options:
+    max-complexity: 10
+
+pycodestyle:
+  disable:
+    - W602
+    - W603
+  enable:
+    - W601
+  options:
+    max-line-length: 79
+
+pydocstyle:
+  disable:
+    - D100
+    - D101
+
+pyflakes:
+  disable:
+    - F403
+    - F810
+
+pylint:
+  disable:
+    - bad-builtin
+    - too-few-public-methods
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 15
+    max-statements: 60
+    max-parents: 7
+    max-attributes: 7
+    min-public-methods: 1
+    max-public-methods: 20
+    max-module-lines: 1000
+    max-line-length: 99
+    output-format: parseable
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+
+mypy:
+  run: true
+  options:
+    ignore-missing-imports: true
+    follow-imports: skip
