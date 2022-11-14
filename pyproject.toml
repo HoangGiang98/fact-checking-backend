@@ -7,7 +7,6 @@ authors = ["gvu <gvu@inovex.de>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.3"
-coverage = "^6.5.0"
 
 [tool.poetry.dev-dependencies]
 prospector = {extras = ["with_pyroma", "with_bandit", "with_mypy"], version = "^1.7.7"}
@@ -15,6 +14,7 @@ pre-commit = "^2.20.0"
 pytest = "^7.2.0"
 unittest = "^0.0"
 black = "^22.10.0"
+coverage = "^6.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -56,6 +56,7 @@ exclude_lines = [
   # Don't complain if non-runnable code isn't run:
   'if 0:',
   'if __name__ == .__main__.:',
+  # Don't complain about abstract methods, they aren't run:
   '@(abc\.)?abstractmethod'
 ]
 ignore_errors = true
