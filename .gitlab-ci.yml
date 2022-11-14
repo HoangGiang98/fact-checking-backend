@@ -4,6 +4,8 @@ default:
     paths:
     - "~/.cache/pip/"
   before_script:
+  - export DEBIAN_FRONTEND=noninteractive
+  - export TZ=Etc/UTC
   - apt -y update
   - apt -y install apt-utils
   - apt -y install net-tools python3.8 python3-pip git
@@ -20,5 +22,5 @@ build:
   - python3 manage.py test
 
 stages:
-- test
 - build
+- test
