@@ -7,6 +7,10 @@ authors = ["gvu <gvu@inovex.de>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.3"
+google-api-python-client = "^2.66.0"
+pymediawiki = "^0.7.2"
+validators = "0.18.2"
+farm-haystack = {extras = ["crawler", "graphdb", "inmemorygraph", "only-milvus", "only-pinecone", "opensearch", "preprocessing", "sql", "weaviate"], version = "^1.11.0"}
 
 [tool.poetry.dev-dependencies]
 prospector = {extras = ["with_pyroma", "with_bandit", "with_mypy"], version = "^1.7.7"}
