@@ -5,15 +5,19 @@ default:
     - "~/.cache/pip/"
   before_script:
   - export DEBIAN_FRONTEND=noninteractive
-  - export TZ=Etc/UTC
+  - export TZ=Europe/Berlin
   - apt -y update
   - apt -y install apt-utils
-  - apt -y install net-tools python3.8 python3-pip git
+  - apt -y install net-tools python3.8 python3-pip git python3-venv
   - apt -y upgrade
   - git config user.email "gitlab@lrz.de"
   - git config user.name "Gitlab Runner"
-  - pip install django
-  - cd fact-checking-tool
+  - pip3 install poetry
+  - pip3 install django
+  - poetry install
+  - source $(poetry env info --path)/bin/activate
+  - pip3 install django
+  - cd django-app
 build:
   stage: build
   script:

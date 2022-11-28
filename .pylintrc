@@ -1,3 +1,3 @@
 [MASTER]
 load-plugins=pylint_django
-django-settings-module=fact_checking_service.settings
+django-settings-module=django.fact_checking_service.settings
