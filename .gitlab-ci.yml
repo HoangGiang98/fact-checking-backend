@@ -13,7 +13,6 @@ default:
   - git config user.email "gitlab@lrz.de"
   - git config user.name "Gitlab Runner"
   - pip install django
-  - cd fact-checking-tool
 build:
   stage: build
   script:
