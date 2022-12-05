@@ -128,3 +128,4 @@ dmypy.json
 .LSOverride
 
 crawled_files
+elasticsearch-data

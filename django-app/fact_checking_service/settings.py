@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "applications.factchecker",
-    "applications.apisearch"
+    "django-app.applications.factchecker",
+    "django-app.applications.apisearch",
+    "django-app.applications.elasticsearch",
 ]
 
 MIDDLEWARE = [
