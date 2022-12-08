@@ -40,15 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-<<<<<<< HEAD:django-app/fact_checking_service/settings.py
     "applications.factchecker",
     "applications.elasticsearch",
     "applications.apisearch",
-=======
-    "django-app.applications.factchecker",
-    "django-app.applications.apisearch",
-    "django-app.applications.elasticsearch",
->>>>>>> a1e087d0f34f854b57efd4edff94f71aa93c4d1d:fact_checking_service/settings.py
 ]
 
 MIDDLEWARE = [
