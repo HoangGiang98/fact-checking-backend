@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "applications.factchecker",
     "applications.elasticsearch",
+    "applications.apisearch",
 ]
 
 MIDDLEWARE = [
