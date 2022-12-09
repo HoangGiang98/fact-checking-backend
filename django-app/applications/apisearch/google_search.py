@@ -22,10 +22,11 @@ class GoogleSearch:
     defautt_options.update(kwargs)
     try:
       response = service.cse().list(q=search_term, cx=self.GOOGLE_CSE_ID, **defautt_options).execute()
-      formated_response = [  {"title": res["title"], "url": res["formattedUrl"]} for res in response["items"] ]
-      self.search_results.update( {"results": formated_response})
+      pages_list = response["items"]
+      if pages_list: 
+        formated_response = [  {"title": page["title"], "url": page["formattedUrl"]} for page in pages_list ]
+        self.search_results.update( {"results": formated_response})
     except HttpError as e:
-      print("Google")
       print(e)
 
   def get_search_results(self):

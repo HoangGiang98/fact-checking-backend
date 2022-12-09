@@ -7,14 +7,14 @@ class WikiSearch:
   def __init__(self):
     pass
 
-  def search(self, search_term:str, results:int = 10):
+  def search(self, search_term:str, count:int = 10):
     try:
-      reponse_list: list = self.wikipedia.opensearch(search_term, results=results)
+      reponse_list: list = self.wikipedia.opensearch(search_term, results=count)
       no_disambiguation_response : list = list(filter(lambda res: (not "disambiguation" in res[0]), reponse_list))
-      formated_response : list = [ {"title": res[0] , "url": res[2]} for res in no_disambiguation_response]
-      self.search_results.update( {"results": formated_response})
+      if no_disambiguation_response:
+        formated_response : list = [ {"title": res[0] , "url": res[2]} for res in no_disambiguation_response]
+        self.search_results.update( {"results": formated_response})
     except Exception as e:
-      print("Wikipedia")
       print(e)
 
   def parse_results(self, results:list):
