@@ -6,7 +6,7 @@ from haystack.pipelines import ExtractiveQAPipeline
 
 # initialize doc store, retriever and reader components
 DOC_STORE = ElasticsearchDocumentStore(
-    host='20.208.36.26', username='', password='', index='aurelius'
+    host='20.250.28.198', username='', password='', index='test_en'
 )
 RETRIEVER = DensePassageRetriever(
     document_store=DOC_STORE,
