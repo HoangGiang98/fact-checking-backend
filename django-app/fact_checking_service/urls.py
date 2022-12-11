@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("factchecker/", include("applications.factchecker.urls")),
     path("documents/", include("applications.elasticsearch.urls")),
+    path("apisearch/", include("applications.apisearch.urls")),
 ]

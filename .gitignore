@@ -131,3 +131,4 @@ elasticsearch-data
 
 db.prod.sqlite3
 db.test.sqlite3
+crawled_files
