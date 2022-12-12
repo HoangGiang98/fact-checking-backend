@@ -161,3 +161,4 @@ class ApisSearch:
 # Test retriever and reader
 # apiSearch.fact_check_1("Drinking coffee is bad?")
 # apiSearch.print_fact_check_1()
+

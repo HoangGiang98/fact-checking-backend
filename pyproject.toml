@@ -14,11 +14,18 @@ factory-boy = "^3.2.1"
 elasticsearch-dsl = "^7.4.0"
 django-elasticsearch-dsl-drf = "^0.22.5"
 tzdata = "^2022.6"
+<<<<<<< HEAD
 fastapi = "^0.88.0"
 datetime = "^4.8"
 django-cors-headers = "^3.13.0"
 haystack = "^0.42"
 llvmlite = "^0.39.1"
+=======
+google-api-python-client = "^2.66.0"
+pymediawiki = "^0.7.2"
+validators = "0.18.2"
+farm-haystack = {extras = ["crawler", "graphdb", "inmemorygraph", "only-milvus", "only-pinecone", "opensearch", "preprocessing", "sql", "weaviate"], version = "^1.11.0"}
+>>>>>>> dbc2779 (Integrating api, crawling and preprocessing)
 
 [tool.poetry.dev-dependencies]
 prospector = {extras = ["with_pyroma", "with_bandit", "with_mypy"], version = "^1.7.7"}

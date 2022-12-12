@@ -9,15 +9,14 @@ from .models import ApiSearchRequest
 def health(request):
     return HttpResponse("ApiSearch is running")
 
-
 # Create your views here.
 @api_view(["GET"])
 def history(request):
-    latest = ApiSearchRequest.objects.all().order_by("-datetime")[:20]
+  latest = ApiSearchRequest.objects.all().order_by("-datetime")[:20]
 
-    serializer = ApiSearchRequestSerializer(latest, many=True)
+  serializer = ApiSearchRequestSerializer(latest, many=True)
 
-    return HttpResponse(serializer.data, content_type="application/json")
+  return HttpResponse(serializer.data, content_type="application/json")
 
 
 @api_view(["POST"])
