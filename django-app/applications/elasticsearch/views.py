@@ -23,12 +23,12 @@ import json
 # from .knowledge_source import KnowledgeSourceDocument
 
 
-
-async def handle_fact_check_by_elasticsearch(request,fact) :
+async def handle_fact_check_by_elasticsearch(request, fact):
     print(fact)
-    result  =  await get_query(fact)
+    result = await get_query(fact)
     print(result)
     return HttpResponse(result)
+
 
 # class KnowledgeSourceViewSet(DocumentViewSet):
 #     document = KnowledgeSourceDocument
