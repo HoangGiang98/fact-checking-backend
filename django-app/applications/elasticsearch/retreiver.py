@@ -3,7 +3,7 @@ from haystack.document_stores import ElasticsearchDocumentStore
 from haystack.nodes import DensePassageRetriever
 from haystack.nodes import FARMReader
 from haystack.pipelines import ExtractiveQAPipeline
-import json
+from applications.factchecker.models import Answer
 
 # initialize doc store, retriever and reader components
 DOC_STORE = ElasticsearchDocumentStore(
@@ -28,35 +28,46 @@ PIPELINE = ExtractiveQAPipeline(reader=READER, retriever=RETRIEVER)
 # initialize API
 
 
+def __resolve_verdict(score):
+    if score >= 9.7:
+        return "True"
+    if score <= -0.7:
+        return "False"
+    return "Uncertain"
+
+
 async def get_query(q: str, retriever_limit: int = 10, reader_limit: int = 3):
     """Makes query to doc store via Haystack pipeline.
 
     :param q: Query string representing the question being asked.
     :type q: str
     """
+
+    print(q)
+
     # get answers
     response_json = PIPELINE.run(query=q)
 
-    data = {"claim": q}
+    answers = []
 
     if len(response_json["answers"]) > 0:
-        first_answer = {
-            "name": response_json["answers"][0].meta["meta"]["name"],
-            "content": response_json["answers"][0].context,
-        }
-        first_answer = json.dumps(first_answer)
+        first_answer = Answer()
+        first_answer.content = response_json["answers"][0].context
+        first_answer.title = response_json["answers"][0].meta["meta"]["name"]
+        first_answer.verdict = __resolve_verdict(
+            response_json["answers"][0].score
+        )
 
-        data["answers"] = [first_answer]
+        answers.append(first_answer)
 
     if len(response_json["answers"]) > 1:
-        second_answer = {
-            "name": response_json["answers"][1].meta["meta"]["name"],
-            "content": response_json["answers"][1].context,
-        }
-        second_answer = json.dumps(second_answer)
+        second_answer = Answer()
+        second_answer.content = response_json["answers"][1].context
+        second_answer.title = response_json["answers"][1].meta["meta"]["name"]
+        second_answer.verdict = __resolve_verdict(
+            response_json["answers"][1].score
+        )
 
-        data["answers"].append(second_answer)
+        answers.append(second_answer)
 
-    json_data = json.dumps(data)
-
-    return json_data
+    return answers

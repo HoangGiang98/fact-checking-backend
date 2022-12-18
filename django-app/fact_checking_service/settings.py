@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "applications.factchecker",
     "applications.elasticsearch",
     "applications.apisearch",
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = "fact_checking_service.urls"
@@ -137,3 +140,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Elasticsearch DSL
 ELASTICSEARCH_DSL = {"default": {"hosts": "http://20.250.28.198:9200"}}
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
