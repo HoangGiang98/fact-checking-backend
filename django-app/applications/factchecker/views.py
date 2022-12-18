@@ -21,7 +21,7 @@ def history(request):
 
     serializer = SearchRequestDtoOutSerializer(latest, many=True)
 
-    return HttpResponse(serializer.data, content_type="application/json")
+    return HttpResponse(json.dumps(serializer.data), content_type="application/json")
 
 
 @api_view(["POST"])
