@@ -21,12 +21,12 @@ def history(request):
 
 @api_view(["POST"])
 def verify(request):
-  serializer = ApiSearchRequestSerializer(data=request.data)
-  serializer.is_valid(raise_exception=True)
-  serializer.save()
+    serializer = ApiSearchRequestSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
 
-  dto = serializer.Meta.model
-  print(dto.claim)
-  print(dto.answer)
+    dto = serializer.Meta.model
+    print(dto.claim)
+    print(dto.answer)
 
-  return HttpResponse("Answer")
+    return HttpResponse("Answer")

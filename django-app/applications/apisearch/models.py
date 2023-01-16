@@ -1,6 +1,5 @@
 from django.db import models
 
-# TODO: Rename the class for clarity 
 class ApiSearchRequest(models.Model):
     """A model representing fact check requests using search api: requested claim and the answer."""
 
