@@ -139,7 +139,7 @@ MEDIA_URL = "media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Elasticsearch DSL
-ELASTICSEARCH_DSL = {"default": {"hosts": "http://20.250.28.198:9200"}}
+ELASTICSEARCH_DSL = {"default": {"hosts": "http://176.105.202.80:9200"}}
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',

@@ -1,31 +1,13 @@
-from django_elasticsearch_dsl_drf.constants import (
-    LOOKUP_FILTER_RANGE,
-    LOOKUP_QUERY_IN,
-    LOOKUP_QUERY_GT,
-    LOOKUP_QUERY_GTE,
-    LOOKUP_QUERY_LT,
-    LOOKUP_QUERY_LTE,
-)
-from django_elasticsearch_dsl_drf.filter_backends import (
-    FilteringFilterBackend,
-    OrderingFilterBackend,
-    DefaultOrderingFilterBackend,
-    SearchFilterBackend,
-)
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 from django.http import HttpResponse
 
 from .retreiver import get_query
-import json
-
-
-# from .knowledge_source import KnowledgeSourceDocument
+from .retreiver import get_top10
 
 
 async def handle_fact_check_by_elasticsearch(request, fact):
     print(fact)
-    result = await get_query(fact)
+    result = await get_top10(fact)
     print(result)
     return HttpResponse(result)
 
