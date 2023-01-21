@@ -17,6 +17,10 @@ tzdata = "^2022.6"
 fastapi = "^0.88.0"
 datetime = "^4.8"
 django-cors-headers = "^3.13.0"
+haystack = "^0.42"
+llvmlite = "^0.39.1"
+numba = "^0.56.4"
+farm-haystack = "^1.12.2"
 
 [tool.poetry.dev-dependencies]
 prospector = {extras = ["with_pyroma", "with_bandit", "with_mypy"], version = "^1.7.7"}

@@ -3,6 +3,7 @@ from haystack.nodes import BM25Retriever
 from haystack.nodes import DensePassageRetriever
 from haystack.nodes import FARMReader
 from haystack.pipelines import ExtractiveQAPipeline
+from haystack.pipelines import DocumentSearchPipeline
 from applications.factchecker.models import Answer
 
 # initialize doc store, retriever and reader components
@@ -31,7 +32,7 @@ READER = FARMReader(
 )
 # initialize pipeline
 DENSE_PIPELINE = ExtractiveQAPipeline(reader=READER, retriever=DENSE_RETRIEVER)
-SPARSE_PIPELINE = ExtractiveQAPipeline(reader=READER, retriever=SPARSE_RETRIEVER)
+SPARSE_PIPELINE = DocumentSearchPipeline(retriever=SPARSE_RETRIEVER)
 
 
 # initialize API
