@@ -74,6 +74,10 @@ python manage.py runserver 8000
 
 Please make sure you configure the Google and Bing API key and other runtime dependencies as per the requirement of your project.
 
+## Elasticsearch
+
+Both pipelines use Wikipedia Database, which must be running on an Elastic Search installation. The following [https://github.com/AlonEirew/wikipedia-to-elastic](project) contains instructions and source code to import a wikipedia archive. To be able to run this project one needs to install specifically Java 11. Afterwards one needs to build the gradle project, unzip the downloaded Wikipedia archive and place the archive in the dumps folder. Then the import process can be started. After the dump has been imported successfully, one needs to clone the entire index, for the NLI pipeline to use it. DPR embeddings should be generated on the old index, for DPR(embeddings.py). The script requires slightly other field names, one needs to rename parsedParagraphs to content and name to meta.title. There are dedicated http calls for that. One needs to join all parsed paragraphs at first, run concat-pipeline and trigger-pipeline for that. Then one needs to run rename-pipeline and trigger-rename calls. Finally, one can move all documents with renamed fields to another index, for convenience.
+
 ## Authors
 
 - **[Giang Vu](https://gitlab.lrz.de/ge86yog)**
