@@ -1,0 +1,13 @@
+POST http://20.250.28.198:9200/_reindex
+Accept: application/json
+Content-Type: application/json
+
+{
+  "source": {
+    "index": "en_wiki_dpr"
+  },
+  "dest": {
+    "index": "en_wiki_dpr_concat",
+    "pipeline": "rename_pipeline"
+  }
+}
