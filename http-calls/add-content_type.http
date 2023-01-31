@@ -1,0 +1,18 @@
+POST http://176.105.202.80:9200/test_en_concat/_update_by_query
+Accept: application/json
+Content-Type: application/json
+
+{
+  "query": {
+    "bool": {
+        "must_not": {
+            "exists": {
+                "field": "content_type"
+            }
+        }
+    }
+  },
+  "script" : {
+    "inline": "ctx._source.content_type = 'text'"
+  }
+}
