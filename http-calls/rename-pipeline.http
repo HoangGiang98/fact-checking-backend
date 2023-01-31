@@ -1,0 +1,20 @@
+PUT http://176.105.202.80:9200/_ingest/pipeline/rename_pipeline
+Accept: application/json
+Content-Type: application/json
+
+{
+  "description" : "rename fields for dpr",
+  "processors" : [
+    {
+      "rename": {
+        "field": "parsedParagraphs",
+        "target_field": "content"
+      }
+    }, {
+      "rename": {
+        "field": "title",
+        "target_field": "meta.name"
+      }
+    }
+  ]
+}
