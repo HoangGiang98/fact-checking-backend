@@ -1,0 +1,15 @@
+PUT http://176.105.202.80:9200/_ingest/pipeline/concat_pipeline
+Accept: application/json
+Content-Type: application/json
+
+{
+  "description": "merge values of content",
+  "processors": [
+    {
+      "join": {
+        "field": "content",
+        "separator": ""
+      }
+    }
+  ]
+}
