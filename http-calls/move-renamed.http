@@ -1,0 +1,21 @@
+POST http://176.105.202.80:9200/_reindex/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "source": {
+    "index": "test_en",
+    "query": {
+      "bool": {
+        "must": {
+          "exists": {
+            "field": "parsedParagraphs"
+          }
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "en_wiki"
+  }
+}
