@@ -1,3 +1,4 @@
+from applications.elasticsearch.retreiver import get_top_k_docs
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 

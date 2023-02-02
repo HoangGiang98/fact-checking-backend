@@ -1,14 +1,18 @@
 
 from django.http import HttpResponse
 
-from .retreiver import get_query
-from .retreiver import get_top10
+from .retreiver import get_top_k_docs
+import json
+
+
+# from .knowledge_source import KnowledgeSourceDocument
 
 
 async def handle_fact_check_by_elasticsearch(request, fact):
-    print(fact)
-    result = await get_top10(fact)
-    print(result)
+    # print(fact)
+    result = await get_top_k_docs(fact)
+    # print(result)
+    # print(len(result["documents"]))
     return HttpResponse(result)
 
 

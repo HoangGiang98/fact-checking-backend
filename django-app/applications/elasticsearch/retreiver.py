@@ -37,7 +37,6 @@ SPARSE_PIPELINE = DocumentSearchPipeline(retriever=SPARSE_RETRIEVER)
 
 # initialize API
 
-
 def __resolve_verdict(score):
     if score >= 9.7:
         return "True"
@@ -77,34 +76,10 @@ async def get_query(q: str):
     return answers
 
 
-async def get_top10(q: str):
+async def get_top_k_docs(q: str, k: int = 10):
     print(q)
 
     # get answers
-    response_json = SPARSE_PIPELINE.run(query=q)
-
+    response_json = SPARSE_PIPELINE.run(query=q, params={"Retriever": {"top_k": k}})
+    print(response_json)
     return response_json
-
-    answers = []
-
-    if len(response_json["answers"]) > 0:
-        first_answer = Answer()
-        first_answer.content = response_json["answers"][0].context
-        first_answer.title = response_json["answers"][0].meta["meta"]["name"]
-        first_answer.verdict = __resolve_verdict(
-            response_json["answers"][0].score
-        )
-
-        answers.append(first_answer)
-
-    if len(response_json["answers"]) > 1:
-        second_answer = Answer()
-        second_answer.content = response_json["answers"][1].context
-        second_answer.title = response_json["answers"][1].meta["meta"]["name"]
-        second_answer.verdict = __resolve_verdict(
-            response_json["answers"][1].score
-        )
-
-        answers.append(second_answer)
-
-    return answers
