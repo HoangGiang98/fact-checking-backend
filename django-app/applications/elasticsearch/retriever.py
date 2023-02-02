@@ -5,6 +5,7 @@ from haystack.nodes import FARMReader
 from haystack.pipelines import ExtractiveQAPipeline
 from haystack.pipelines import DocumentSearchPipeline
 from applications.factchecker.models import Answer
+from applications.utils.enums import VerdictsDPR
 
 # initialize doc store, retriever and reader components
 DENSE_DOC_STORE = ElasticsearchDocumentStore(
@@ -21,9 +22,7 @@ DENSE_RETRIEVER = DensePassageRetriever(
     embed_title=True,
 )
 
-SPARSE_RETRIEVER = BM25Retriever(
-    document_store=SPARSE_DOC_STORE
-)
+SPARSE_RETRIEVER = BM25Retriever(document_store=SPARSE_DOC_STORE)
 
 READER = FARMReader(
     model_name_or_path="deepset/bert-base-cased-squad2",
@@ -35,51 +34,42 @@ DENSE_PIPELINE = ExtractiveQAPipeline(reader=READER, retriever=DENSE_RETRIEVER)
 SPARSE_PIPELINE = DocumentSearchPipeline(retriever=SPARSE_RETRIEVER)
 
 
-# initialize API
-
-def __resolve_verdict(score):
-    if score >= 9.7:
-        return "True"
-    if score <= -0.7:
-        return "False"
-    return "Uncertain"
-
-
-async def get_query(q: str):
-    print(q)
-
+def get_query(q: str):
     # get answers
     response_json = DENSE_PIPELINE.run(query=q)
+    response_json["answers"].sort(key=lambda x: abs(x.score), reverse=True)
 
     answers = []
+    verdict = VerdictsDPR.LOW_SIMILARITY
 
     if len(response_json["answers"]) > 0:
         first_answer = Answer()
         first_answer.content = response_json["answers"][0].context
-        first_answer.title = response_json["answers"][0].meta["meta"]["name"]
-        first_answer.verdict = __resolve_verdict(
-            response_json["answers"][0].score
-        )
-
+        first_answer.similarity_dpr = response_json["answers"][0].score * 100
+        if response_json["answers"][0].score > 0.8:
+            verdict = VerdictsDPR.HIGH_SIMILARITY
+        if response_json["answers"][0].score < -0.8:
+            verdict = VerdictsDPR.NO_SIMILARITY
+        title = response_json["answers"][0].meta["meta"]["name"]
+        first_answer.title = title
+        first_answer.url = f"https://en.wikipedia.org/wiki/{title}"
         answers.append(first_answer)
 
     if len(response_json["answers"]) > 1:
         second_answer = Answer()
         second_answer.content = response_json["answers"][1].context
-        second_answer.title = response_json["answers"][1].meta["meta"]["name"]
-        second_answer.verdict = __resolve_verdict(
-            response_json["answers"][1].score
-        )
-
+        second_answer.similarity_dpr = response_json["answers"][1].score * 100
+        title = response_json["answers"][1].meta["meta"]["name"]
+        second_answer.title = title
+        second_answer.url = f"https://en.wikipedia.org/wiki/{title}"
         answers.append(second_answer)
 
-    return answers
+    return {"verdict": verdict.value, "results": answers}
 
 
-async def get_top_k_docs(q: str, k: int = 10):
-    print(q)
-
+def get_top_k_docs(q: str, k: int = 10):
     # get answers
-    response_json = SPARSE_PIPELINE.run(query=q, params={"Retriever": {"top_k": k}})
-    print(response_json)
+    response_json = SPARSE_PIPELINE.run(
+        query=q, params={"Retriever": {"top_k": k}}
+    )
     return response_json

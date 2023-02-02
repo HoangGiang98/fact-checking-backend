@@ -37,8 +37,4 @@ class BingSearch:
 
     def get_search_results(self):
         return self.search_results
-
-# bing_search = BingSearch()
-# bing_search.search("Coffee")
-# res = bing_search.get_search_results()
-# print(res)
+    
