@@ -3,17 +3,18 @@ from django.http import HttpResponse
 from .serializers import (
     SearchRequestDtoOutSerializer,
     SearchRequestDtoInSerializer,
-    WebSearchRequestDataOutSerializer
 )
+from applications.utils.enums import Engines
 from rest_framework.decorators import api_view
-from applications.websearch.enums import Engines
-from .models import SearchRequest, SearchResponse
 from applications.websearch.web_search import WebSearch
-from applications.elasticsearch.retreiver import get_query
+from applications.elasticsearch.elastic_search import ElasticSearch
+from applications.factchecker.models import SearchRequest
 import asyncio
 import json
 
 web_search = WebSearch()
+elastic_search = ElasticSearch()
+
 
 def health(request):
     return HttpResponse("Server is running")
@@ -21,70 +22,71 @@ def health(request):
 
 @api_view(["GET"])
 def history(request):
-    latest = SearchRequest.objects.all().order_by("-datetime")[:20]
-
+    latest = SearchRequest.objects.all().order_by("-datetime")[:5]
     serializer = SearchRequestDtoOutSerializer(latest, many=True)
 
-    return HttpResponse(json.dumps(serializer.data), content_type="application/json")
+    return HttpResponse(
+        json.dumps(serializer.data), content_type="application/json"
+    )
 
 
 @api_view(["POST"])
 def verify(request):
+
     serializer = SearchRequestDtoInSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
     dto = serializer.validated_data
     method = str(dto["verification_method"])
     claim = str(dto["claim"])
-    if method != "dpr" and method != "google" and method != "bing":
-        return HttpResponse("The method is not supported")
-    
     dto_out = SearchRequest(claim=claim, verification_method=method)
     dto_out.save()
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    
-    if (method == "dpr"):
-        future = asyncio.ensure_future(get_query(claim))
+
+    if method == "dpr":
+        future = asyncio.ensure_future(elastic_search.elastic_dprcheck(claim))
         loop.run_until_complete(future)
 
-        results = future.result()
-        for result in results:
-            result.request_id = dto_out.id
-            result.save()     
+        response = process_results(dto_out, future)
 
-        dto_out.answer_set.set(results)
-        dto_out.save()
-
-        response = SearchRequestDtoOutSerializer(dto_out).data
-        
         return HttpResponse(
             json.dumps(response), content_type="application/json; charset=utf8"
         )
-    if (method == "google" or method == "bing"):
+    if method == "nli_google" or method == "nli_bing" or method == "nli_wiki":
         future = None
-        if method == "bing":
-            future = asyncio.ensure_future(web_search.fact_check_claim(claim=claim, engine= Engines.BING))
-        if method == "google":
-            future = asyncio.ensure_future(web_search.fact_check_claim(claim=claim, engine= Engines.GOOGLE))
+        if method == "nli_wiki":
+            future = asyncio.ensure_future(
+                elastic_search.elastic_bertcheck(claim=claim)
+            )
+        if method == "nli_bing":
+            future = asyncio.ensure_future(
+                web_search.webcheck(claim=claim, engine=Engines.BING)
+            )
+        if method == "nli_google":
+            future = asyncio.ensure_future(
+                web_search.webcheck(claim=claim, engine=Engines.GOOGLE)
+            )
         loop.run_until_complete(future)
 
-        factcheck_result = future.result()
+        response = process_results(dto_out, future)
 
-        factcheck_response = SearchResponse(
-            claim=factcheck_result["claim"], 
-            results=factcheck_result["results"],
-            verdict=factcheck_result["verdict"], 
-            request= dto_out
-            )
-        factcheck_response.save()
-        dto_out.save()
-
-        websearch_response = WebSearchRequestDataOutSerializer(dto_out).data
-        
         return HttpResponse(
-            json.dumps(websearch_response), content_type="application/json; charset=utf8"
+            json.dumps(response),
+            content_type="application/json; charset=utf8",
         )
-        
 
+    return HttpResponse("The method is not supported")
+
+
+def process_results(dto_out, future):
+    results = future.result()["results"]
+    for result in results:
+        result.request_id = dto_out.id
+        result.save()
+    dto_out.verdict = future.result()["verdict"]
+    dto_out.answer_set.set(results)
+    dto_out.save()
+    response = SearchRequestDtoOutSerializer(dto_out).data
+    return response

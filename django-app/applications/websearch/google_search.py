@@ -38,8 +38,3 @@ class GoogleSearch:
     def get_search_results(self):
         return self.search_results
 
-
-# gg_search = GoogleSearch()
-# res = gg_search.search("Coffee")
-
-# print(res)
