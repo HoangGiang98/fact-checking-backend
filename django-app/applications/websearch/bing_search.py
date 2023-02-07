@@ -3,7 +3,7 @@ import requests
 
 
 class BingSearch:
-    BING_API_KEY: Final[str] = "d41f5a72bb714999ad527a2863d922c7"
+    BING_API_KEY: Final[str] = ""
     BING_URL: Final[str] = "https://api.bing.microsoft.com/v7.0/search"
     search_results = {"engine": "Bing", "results": []}
   

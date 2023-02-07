@@ -4,8 +4,8 @@ from typing import Final
 
 
 class GoogleSearch:
-    GOOGLE_API_KEY: Final[str] = "AIzaSyBLbCeqGUdjmFgXE43PrUNOAlrVKIOsET0"
-    GOOGLE_CSE_ID: Final[str] = "67d9a70a5f5ab4b62"
+    GOOGLE_API_KEY: Final[str] = ""
+    GOOGLE_CSE_ID: Final[str] = ""
     search_results = {"engine": "Google", "results": []}
 
     def __init__(self):
