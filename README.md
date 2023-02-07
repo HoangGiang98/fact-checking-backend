@@ -1,7 +1,7 @@
 # Fact Checking Backend
 
-This is the repository for the backend service for the [Fact Checking Frontend](https://gitlab.lrz.de/fact-checking-tool/fact-checking-frontend-2) of the Fact Checking Tool. The Fact Checking Tool is an app that supports document search, evidence retrieval, and realtime claim verification. It employs natural language processing to create a standard pipeline for automated fact checking.
-
+This is the repository for the backend service for the [Fact Checking Frontend](https://github.com/HoangGiang98/fact-checking-frontend) of the Fact Checking Tool. The Fact Checking Tool is an app that supports document search, evidence retrieval, and realtime claim verification. It employs natural language processing to create a standard pipeline for automated fact checking.\
+The Fact Checking Tool is a part of a project I participated at the Technical University of Munich.
 ## Features
 
 - Document search using the Google API, Bing API and Elasticsearch
@@ -46,21 +46,26 @@ curl -sSL https://install.python-poetry.org | python3 -
 ```
 poetry install
 ```
+5. Add Google, Bing and Django secret key to the corresponding files
 
-5. Run the migrations
+- fact-checking-backend/django-app/fact_checking_service/settings.py
+- fact-checking-backend/django-app/applications/websearch/bing_search.py
+- fact-checking-backend/django-app/applications/websearch/google_search.py
+
+6. Run the migrations
 
 ```
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-6. Start the development server
+7. Start the development server
 
 ```
 python manage.py runserver 8000
 ```
 
-7. The backend should now be running on http://127.0.0.1:8000/
+8. The backend should now be running on http://127.0.0.1:8000/
 
 ## Built With
 
